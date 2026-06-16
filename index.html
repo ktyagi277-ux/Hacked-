@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Bug Hunter Pro - Apni Site Test Karo</title>
+  <style>
+    body { font-family: Arial; background: #111; color: #0f0; margin: 0; padding: 20px; }
+    h1 { color: #0ff; text-align: center; }
+    .container { max-width: 900px; margin: auto; background: #1a1a1a; padding: 20px; border-radius: 10px; }
+    input, button, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    button { background: #0f0; color: black; font-weight: bold; cursor: pointer; }
+    button:hover { background: #0c0; }
+    .tab { display: none; }
+    .active { display: block; }
+    .tab-buttons { text-align: center; margin-bottom: 20px; }
+    .tab-buttons button { width: auto; display: inline-block; margin: 5px; }
+    .warning { color: #ff0; background: #330; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛡️ Payment Bug Hunter Pro</h1>
+    <p class="warning"><strong>Warning:</strong> Sirf apni khud ki website par test karo. Kisi dusri site par mat chalao. Yeh educational testing tool hai.</p>
+
+    <div class="tab-buttons">
+      <button onclick="openTab(1)">1. Site Setup</button>
+      <button onclick="openTab(2)">2. Amount Tampering</button>
+      <button onclick="openTab(3)">3. Success Bypass</button>
+      <button onclick="openTab(4)">4. Pro Bypass Methods</button>
+      <button onclick="openTab(5)">5. Report Generator</button>
+    </div>
+
+    <!-- Tab 1: Site Setup -->
+    <div id="tab1" class="tab active">
+      <h2>Apni Website Link Daalo</h2>
+      <input type="text" id="siteUrl" placeholder="https://yourwebsite.com/checkout" value="">
+      <input type="text" id="successUrl" placeholder="https://yourwebsite.com/success?order=123">
+      <input type="text" id="productUrl" placeholder="https://yourwebsite.com/product/your-product">
+      <button onclick="saveUrls()">Save & Start Testing</button>
+      <p><strong>Tip:</strong> Product page kholo → Add to cart → Checkout tak jaao aur links copy karke yahan paste karo.</p>
+    </div>
+
+    <!-- Tab 2: Amount Tampering -->
+    <div id="tab2" class="tab">
+      <h2>Amount Tampering Test (Sabse Common Bug)</h2>
+      <button onclick="testAmountTamper()">Start Amount Tampering Test</button>
+      <p id="amountResult"></p>
+      <ol>
+        <li>Checkout page kholo</li>
+        <li>F12 press karke Network tab kholo</li>
+        <li>Pay button dabao</li>
+        <li>Request ko right-click → Copy → Copy as fetch</li>
+        <li>Yahan paste karke amount 1 ya 0 kar do</li>
+      </ol>
+    </div>
+
+    <!-- Tab 3: Success Bypass -->
+    <div id="tab3" class="tab">
+      <h2>Success Page Bypass Test</h2>
+      <button onclick="testSuccessBypass()">Test Success Page Directly</button>
+      <p id="successResult"></p>
+      <p>Agar bina payment kiye success page order confirm kar de toh yeh bada bug hai (Backend verification missing).</p>
+    </div>
+
+    <!-- Tab 4: Professional Bypass Methods -->
+    <div id="tab4" class="tab">
+      <h2>Professional Bypass Methods</h2>
+      <h3>1. Parameter Tampering (Currency / Amount)</h3>
+      <button onclick="showProMethod(1)">Generate Tampering Template</button>
+      
+      <h3>2. Webhook Replay Attack</h3>
+      <button onclick="showProMethod(2)">Generate Replay Template (Postman)</button>
+      
+      <h3>3. Negative Amount / Null Value</h3>
+      <button onclick="showProMethod(3)">Test Negative Amount</button>
+      
+      <h3>4. VPN + JP Morgan Style Test</h3>
+      <button onclick="showProMethod(4)">VPN + International Card Instructions</button>
+      
+      <div id="proOutput" style="background:#222; padding:15px; margin-top:15px; white-space:pre-wrap; font-size:14px;"></div>
+    </div>
+
+    <!-- Tab 5: Report -->
+    <div id="tab5" class="tab">
+      <h2>Test Report</h2>
+      <textarea id="report" rows="15" placeholder="Yahan test results note karo..."></textarea>
+      <button onclick="generateReport()">Generate Final Report</button>
+      <p id="finalReport"></p>
+    </div>
+  </div>
+
+  <script>
+    let siteData = {};
+
+    function openTab(n) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab' + n).classList.add('active');
+    }
+
+    function saveUrls() {
+      siteData.site = document.getElementById('siteUrl').value;
+      siteData.success = document.getElementById('successUrl').value;
+      siteData.product = document.getElementById('productUrl').value;
+      alert("✅ URLs Saved! Ab testing shuru kar sakte ho.");
+      openTab(2);
+    }
+
+    function testAmountTamper() {
+      const url = siteData.site || "Apna checkout URL daalo pehle";
+      document.getElementById('amountResult').innerHTML = `
+        <strong>Test Steps:</strong><br>
+        1. ${url} kholo<br>
+        2. F12 → Elements tab<br>
+        3. amount, price, total value ko 1 ya 0 mein change kar do<br>
+        4. Payment try karo<br>
+        <span style="color:yellow">Agar ₹1 mein payment success ho jaye aur order confirm ho jaye → Critical Bug!</span>`;
+    }
+
+    function testSuccessBypass() {
+      const url = siteData.success || "Success URL daalo";
+      document.getElementById('successResult').innerHTML = `
+        Direct ye URL kholo: <a href="${url}" target="_blank">${url}</a><br>
+        Agar order paid ya confirmed dikh raha hai bina payment kiye → <strong>Backend verification missing hai (Sabse bada bug)</strong>`;
+    }
+
+    function showProMethod(n) {
+      let output = '';
+      if (n === 1) {
+        output = `// Parameter Tampering Template (Console mein chalao)\nfetch('${siteData.site}', {\n  method: 'POST',\n  body: JSON.stringify({amount: 1, currency: 'USD'})\n}).then(r => r.text()).then(console.log);`;
+      } else if (n === 2) {
+        output = `Webhook Replay Attack:\n1. Postman kholo\n2. POST request banao apne webhook URL par\n3. Purane successful payment ka JSON body paste karo\n4. X-Razorpay-Signature header add karo\nAgar naya order create ho jaye → Replay attack possible hai.`;
+      } else if (n === 3) {
+        output = `Negative Amount Test:\nAmount field ko -5000 ya null kar ke try karo.\nAgar system negative amount accept kar le toh refund glitch ban sakta hai.`;
+      } else if (n === 4) {
+        output = `JP Morgan + VPN Professional Test:\n1. VPN (US server) on karo\n2. Test card use karo: 5555 5555 5555 4444\n3. Billing address US ka daalo, shipping India ka\n4. Dekho kya payment bypass ho jata hai bina proper risk check ke.`;
+      }
+      document.getElementById('proOutput').textContent = output;
+    }
+
+    function generateReport() {
+      const report = document.getElementById('report').value;
+      document.getElementById('finalReport').innerHTML = `
+        <strong>Final Security Report:</strong><br><br>
+        ${report || "Koi notes nahi daale"}<br><br>
+        <span style="color:orange">Recommendation: Agar koi bhi test success ho gaya toh turant webhook + server-side verification + amount + signature check lagao.</span>`;
+    }
+
+    alert("Dashboard loaded. Sirf apni site ke liye use karo. Testing responsibly karo.");
+  </script>
+</body>
+</html>
