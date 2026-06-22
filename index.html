@@ -1,555 +1,93 @@
-<!DOCTYPE html>
+
+html_code = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vishal Technopower — Solar Energy Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg: #0a1628;
-            --bg-elevated: #0f1d33;
-            --surface: rgba(255,255,255,0.02);
-            --surface-hover: rgba(255,255,255,0.04);
-            --border: rgba(255,255,255,0.06);
-            --border-active: rgba(255,255,255,0.12);
-            --text-primary: #f0f4f8;
-            --text-secondary: #8aa4c8;
-            --text-muted: #4a6fa5;
-            --accent: #1e5bb5;
-            --accent-light: #4a9eff;
-            --accent-glow: rgba(30,91,181,0.25);
-            --sky: #87ceeb;
-            --sky-glow: rgba(135,206,235,0.25);
-            --success: #10b981;
-            --white: #ffffff;
-            --solar-orange: #f59e0b;
-            --solar-yellow: #fbbf24;
-            --light-on: #fbbf24;
-            --light-off: #374151;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
+            font-family: 'Open Sans', sans-serif;
+            height: 100vh;
             display: flex;
-            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
             position: relative;
         }
 
-        #bgCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-        }
-
-        /* ===== SOLAR LIGHT ANIMATION ===== */
-        .solar-scene {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.15;
-        }
-
-        .solar-panel {
-            width: 200px;
-            height: 120px;
-            background: linear-gradient(135deg, #1e3a5f, #0f1d33);
-            border: 2px solid rgba(74, 158, 255, 0.3);
-            border-radius: 8px;
-            position: relative;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 2px;
-            padding: 4px;
-            box-shadow: 0 0 30px rgba(74, 158, 255, 0.2);
-        }
-
-        .solar-cell {
-            background: linear-gradient(135deg, rgba(30, 91, 181, 0.6), rgba(15, 29, 51, 0.8));
-            border-radius: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .solar-cell::after {
+        body::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(251, 191, 36, 0.3) 50%, transparent 70%);
-            animation: solarShine 3s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        @keyframes solarShine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        .light-bulb {
-            width: 60px;
-            height: 60px;
-            margin: 20px auto 0;
+        .login-container {
             position: relative;
+            z-index: 1;
+            width: 420px;
+            padding: 50px 45px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        .bulb-glass {
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(251, 191, 36, 0.8));
-            border-radius: 50%;
-            margin: 0 auto;
-            position: relative;
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.3), 0 0 60px rgba(251, 191, 36, 0.1);
-            animation: bulbGlow 2s ease-in-out infinite alternate;
-        }
-
-        .bulb-glass.off {
-            background: radial-gradient(circle at 30% 30%, rgba(100, 100, 100, 0.5), rgba(50, 50, 50, 0.8));
-            box-shadow: none;
-            animation: none;
-        }
-
-        @keyframes bulbGlow {
-            0% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.3), 0 0 60px rgba(251, 191, 36, 0.1); }
-            100% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.7), 0 0 60px rgba(251, 191, 36, 0.5), 0 0 90px rgba(251, 191, 36, 0.3); }
-        }
-
-        .bulb-base {
-            width: 16px;
-            height: 20px;
-            background: linear-gradient(180deg, #6b7280, #374151);
-            margin: -5px auto 0;
-            border-radius: 0 0 4px 4px;
-        }
-
-        .light-rays {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            height: 200px;
-            pointer-events: none;
-        }
-
-        .light-ray {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 2px;
-            height: 60px;
-            background: linear-gradient(180deg, rgba(251, 191, 36, 0.6), transparent);
-            transform-origin: top center;
-            animation: rayPulse 2s ease-in-out infinite;
-        }
-
-        .light-ray.off { opacity: 0; animation: none; }
-
-        .light-ray:nth-child(1) { transform: translate(-50%, 0) rotate(0deg); animation-delay: 0s; }
-        .light-ray:nth-child(2) { transform: translate(-50%, 0) rotate(45deg); animation-delay: 0.2s; }
-        .light-ray:nth-child(3) { transform: translate(-50%, 0) rotate(90deg); animation-delay: 0.4s; }
-        .light-ray:nth-child(4) { transform: translate(-50%, 0) rotate(135deg); animation-delay: 0.6s; }
-        .light-ray:nth-child(5) { transform: translate(-50%, 0) rotate(180deg); animation-delay: 0.8s; }
-        .light-ray:nth-child(6) { transform: translate(-50%, 0) rotate(225deg); animation-delay: 1s; }
-        .light-ray:nth-child(7) { transform: translate(-50%, 0) rotate(270deg); animation-delay: 1.2s; }
-        .light-ray:nth-child(8) { transform: translate(-50%, 0) rotate(315deg); animation-delay: 1.4s; }
-
-        @keyframes rayPulse {
-            0%, 100% { opacity: 0.3; height: 50px; }
-            50% { opacity: 0.8; height: 80px; }
-        }
-
-        /* ===== SOLAR TOGGLE SWITCH ===== */
-        .solar-toggle-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(10, 22, 40, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .solar-toggle-label {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .solar-toggle {
-            position: relative;
-            width: 60px;
-            height: 30px;
-            background: var(--light-off);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .solar-toggle.active {
-            background: linear-gradient(135deg, var(--solar-orange), var(--solar-yellow));
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
-        }
-
-        .solar-toggle-thumb {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 22px;
-            height: 22px;
-            background: white;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .solar-toggle.active .solar-toggle-thumb {
-            transform: translateX(30px);
-        }
-
-        .solar-status {
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .solar-status.on {
-            color: var(--solar-yellow);
-            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-        }
-
-        /* ===== BRAND PANEL ===== */
-        .brand-panel {
-            width: 45%;
-            min-width: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 80px;
-            position: relative;
-            z-index: 2;
-            background: linear-gradient(135deg, rgba(30,91,181,0.05) 0%, transparent 60%);
-        }
-
-        .brand-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 18px;
-            background: rgba(30,91,181,0.1);
-            border: 1px solid rgba(30,91,181,0.2);
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-light);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-            animation: fadeSlideDown 0.8s ease forwards;
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        @keyframes fadeSlideDown {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .brand-badge i { font-size: 10px; }
-
-        .brand-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 56px;
-            font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1.1;
-            letter-spacing: -2px;
-            margin-bottom: 24px;
-            animation: fadeSlideUp 1s ease 0.2s forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .brand-title span {
-            background: linear-gradient(135deg, var(--accent-light), var(--sky));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @keyframes fadeSlideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .brand-desc {
-            font-size: 17px;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            max-width: 420px;
-            margin-bottom: 48px;
-            animation: fadeSlideUp 1s ease 0.4s forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .brand-stats {
-            display: flex;
-            gap: 48px;
-            animation: fadeSlideUp 1s ease 0.6s forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .stat-item { position: relative; }
-
-        .stat-value {
-            font-family: 'Space Grotesk', sans-serif;
+        h1 {
+            text-align: center;
+            color: #ffffff;
             font-size: 36px;
             font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1;
-        }
-
-        .stat-value .counter {
-            background: linear-gradient(135deg, var(--accent-light), var(--sky));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 6px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .stat-divider {
-            width: 1px;
-            background: linear-gradient(180deg, transparent, var(--border), transparent);
-        }
-
-        /* ===== LOGIN PANEL ===== */
-        .login-panel {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 440px;
-            background: var(--surface);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 48px;
-            position: relative;
-            overflow: hidden;
-            animation: cardEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateX(40px) scale(0.95);
-        }
-
-        @keyframes cardEntrance {
-            to { opacity: 1; transform: translateX(0) scale(1); }
-        }
-
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), var(--sky), transparent);
-            opacity: 0.5;
-        }
-
-        .login-card::after {
-            content: '';
-            position: absolute;
-            top: -200px; right: -200px;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(30,91,181,0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .card-glow {
-            position: absolute;
-            bottom: -100px; left: -100px;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(135,206,235,0.06) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .logo-area {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .logo-icon {
-            width: 72px;
-            height: 72px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            border-radius: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(30,91,181,0.3);
-            position: relative;
-        }
-
-        .logo-icon::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            opacity: 0.3;
-            filter: blur(8px);
-            z-index: -1;
-        }
-
-        .logo-icon i {
-            font-size: 32px;
-            color: white;
-        }
-
-        .logo-text {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
-        }
-
-        .logo-sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 4px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .card-header { margin-bottom: 32px; text-align: center; }
-
-        .card-header h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 6px;
-            letter-spacing: -0.5px;
-        }
-
-        .card-header p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .input-group {
-            margin-bottom: 18px;
-            position: relative;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 45px;
             letter-spacing: 0.5px;
-            text-transform: uppercase;
         }
 
-        .input-wrapper { position: relative; }
-
-        .input-wrapper i.icon-left {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 16px;
-            transition: all 0.3s ease;
-            z-index: 2;
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
         }
 
-        .input-field {
+        .form-group input {
             width: 100%;
-            padding: 14px 16px 14px 48px;
-            background: var(--surface);
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            color: #ffffff;
+            font-size: 16px;
+            font-family: 'Open Sans', sans-serif;
             outline: none;
+            transition: border-color 0.3s ease;
         }
 
-        .input-field::placeholder { color: var(--text-muted); }
-
-        .input-field:focus {
-            border-color: var(--accent);
-            background: var(--surface-hover);
-            box-shadow: 0 0 0 4px var(--accent-glow), 0 0 20px rgba(30,91,181,0.1);
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
         }
 
-        .input-field:focus + .icon-left,
-        .input-wrapper:focus-within .icon-left {
-            color: var(--accent-light);
+        .form-group input:focus {
+            border-bottom-color: #ffffff;
         }
 
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            z-index: 2;
-            padding: 4px;
-        }
-
-        .password-toggle:hover { color: var(--text-primary); }
-
-        .options-row {
+        .options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 26px;
-            font-size: 13px;
+            margin-bottom: 35px;
+            margin-top: 10px;
         }
 
         .remember-me {
@@ -557,912 +95,144 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
-            user-select: none;
         }
 
-        .remember-me:hover { color: var(--text-primary); }
-
-        .remember-me input {
-            appearance: none;
-            width: 20px; height: 20px;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            background: var(--surface);
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #ffffff;
             cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
         }
 
-        .remember-me input:checked {
-            background: linear-gradient(135deg, var(--accent), var(--sky));
-            border-color: transparent;
+        .remember-me span {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
         }
 
-        .remember-me input:checked::after {
-            content: '\\f00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 10px;
-        }
-
-        .forgot-link {
-            color: var(--accent-light);
+        .forgot-password {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 13px;
-            position: relative;
             transition: color 0.3s ease;
         }
 
-        .forgot-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 1px;
-            background: var(--accent-light);
-            transition: width 0.3s ease;
+        .forgot-password:hover {
+            color: #ffffff;
+            text-decoration: underline;
         }
-
-        .forgot-link:hover::after { width: 100%; }
 
         .login-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            padding: 14px;
+            background: #ffffff;
+            color: #1a1a2e;
             border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 15px;
+            border-radius: 4px;
+            font-size: 16px;
             font-weight: 600;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Open Sans', sans-serif;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 24px rgba(30,91,181,0.3);
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .login-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s ease;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
         }
 
         .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(30,91,181,0.4), 0 0 60px rgba(74,158,255,0.1);
-        }
-
-        .login-btn:hover::before { left: 100%; }
-
-        .login-btn:active { transform: translateY(0) scale(0.98); }
-
-        .login-btn.loading {
-            pointer-events: none;
-            opacity: 0.8;
-        }
-
-        .login-btn.loading span { opacity: 0; }
-
-        .btn-spinner {
-            position: absolute;
-            width: 20px; height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .login-btn.loading .btn-spinner { opacity: 1; }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 26px 0;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border), transparent);
-        }
-
-        .divider span { padding: 0 16px; }
-
-        .social-login {
-            display: flex;
-            gap: 12px;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            background: var(--surface);
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .social-btn:hover {
-            background: var(--surface-hover);
-            border-color: var(--border-active);
-            color: var(--text-primary);
+            background: #f0f0f0;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .social-btn i { font-size: 16px; }
+        .login-btn:active {
+            transform: translateY(0);
+        }
 
-        .signup-link {
+        .register-link {
             text-align: center;
-            margin-top: 26px;
+            color: rgba(255, 255, 255, 0.85);
             font-size: 14px;
-            color: var(--text-muted);
         }
 
-        .signup-link a {
-            color: var(--accent-light);
+        .register-link a {
+            color: #ffffff;
             text-decoration: none;
             font-weight: 600;
-            transition: color 0.3s ease;
-            position: relative;
+            transition: text-decoration 0.3s ease;
         }
 
-        .signup-link a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 1px;
-            background: var(--accent-light);
-            transition: width 0.3s ease;
+        .register-link a:hover {
+            text-decoration: underline;
         }
 
-        .signup-link a:hover::after { width: 100%; }
-
-        /* ===== POPUP WITH SOLAR LIGHT ===== */
-        .popup-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(10,22,40,0.7);
-            backdrop-filter: blur(20px) saturate(150%);
-            -webkit-backdrop-filter: blur(20px) saturate(150%);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Subtle animation on load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .popup-overlay.active { opacity: 1; visibility: visible; }
-
-        .popup-card {
-            background: var(--surface);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 56px 48px;
-            text-align: center;
-            max-width: 420px;
-            width: 90%;
-            box-shadow: 
-                0 0 0 1px rgba(255,255,255,0.03),
-                0 40px 100px rgba(0,0,0,0.6),
-                0 0 120px rgba(16,185,129,0.08);
-            transform: scale(0.7) translateY(40px);
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .popup-overlay.active .popup-card {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        .popup-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--success), var(--sky), transparent);
-            opacity: 0.6;
-        }
-
-        /* Popup Solar Light */
-        .popup-solar-light {
-            margin: 0 auto 24px;
-            position: relative;
-            width: 80px;
-            height: 80px;
-        }
-
-        .popup-bulb {
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(251, 191, 36, 0.8));
-            border-radius: 50%;
-            margin: 0 auto;
-            position: relative;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.4), 0 0 90px rgba(251, 191, 36, 0.2);
-            animation: popupBulbGlow 1.5s ease-in-out infinite alternate;
-        }
-
-        .popup-bulb.off {
-            background: radial-gradient(circle at 30% 30%, rgba(100, 100, 100, 0.5), rgba(50, 50, 50, 0.8));
-            box-shadow: none;
-            animation: none;
-        }
-
-        @keyframes popupBulbGlow {
-            0% { box-shadow: 0 0 30px rgba(251, 191, 36, 0.6), 0 0 60px rgba(251, 191, 36, 0.4), 0 0 90px rgba(251, 191, 36, 0.2); }
-            100% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8), 0 0 80px rgba(251, 191, 36, 0.6), 0 0 120px rgba(251, 191, 36, 0.4); }
-        }
-
-        .popup-bulb-base {
-            width: 20px;
-            height: 24px;
-            background: linear-gradient(180deg, #6b7280, #374151);
-            margin: -8px auto 0;
-            border-radius: 0 0 6px 6px;
-        }
-
-        .popup-rays {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
-            pointer-events: none;
-        }
-
-        .popup-ray {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(180deg, rgba(251, 191, 36, 0.8), transparent);
-            transform-origin: top center;
-            animation: popupRayPulse 1.5s ease-in-out infinite;
-        }
-
-        .popup-ray.off { opacity: 0; animation: none; }
-
-        .popup-ray:nth-child(1) { transform: translate(-50%, 0) rotate(0deg); animation-delay: 0s; }
-        .popup-ray:nth-child(2) { transform: translate(-50%, 0) rotate(45deg); animation-delay: 0.2s; }
-        .popup-ray:nth-child(3) { transform: translate(-50%, 0) rotate(90deg); animation-delay: 0.4s; }
-        .popup-ray:nth-child(4) { transform: translate(-50%, 0) rotate(135deg); animation-delay: 0.6s; }
-        .popup-ray:nth-child(5) { transform: translate(-50%, 0) rotate(180deg); animation-delay: 0.8s; }
-        .popup-ray:nth-child(6) { transform: translate(-50%, 0) rotate(225deg); animation-delay: 1s; }
-        .popup-ray:nth-child(7) { transform: translate(-50%, 0) rotate(270deg); animation-delay: 1.2s; }
-        .popup-ray:nth-child(8) { transform: translate(-50%, 0) rotate(315deg); animation-delay: 1.4s; }
-
-        @keyframes popupRayPulse {
-            0%, 100% { opacity: 0.5; height: 35px; }
-            50% { opacity: 1; height: 55px; }
-        }
-
-        .checkmark-container {
-            width: 88px; height: 88px;
-            margin: 0 auto 28px;
-            position: relative;
-        }
-
-        .checkmark-circle {
-            width: 88px; height: 88px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--success), #34d399);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 32px rgba(16,185,129,0.3), 0 0 60px rgba(16,185,129,0.15);
-            position: relative;
-            animation: checkmarkPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        .popup-overlay.active .checkmark-circle {
-            animation-delay: 0.2s;
-        }
-
-        @keyframes checkmarkPop {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.15); }
-            70% { transform: scale(0.95); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .checkmark-circle i {
-            font-size: 36px;
-            color: white;
-            animation: checkDraw 0.5s ease forwards;
-            animation-delay: 0.7s;
-            opacity: 0;
-            transform: scale(0.3);
-        }
-
-        .popup-overlay.active .checkmark-circle i {
-            animation: checkDraw 0.5s ease forwards;
-            animation-delay: 0.8s;
-        }
-
-        @keyframes checkDraw {
-            0% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
-            60% { transform: scale(1.1) rotate(5deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-
-        .checkmark-circle::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            border: 2px solid rgba(16,185,129,0.25);
-            animation: rippleRing 2.5s ease-out infinite;
-            animation-delay: 1s;
-        }
-
-        .checkmark-circle::before {
-            content: '';
-            position: absolute;
-            inset: -8px;
-            border-radius: 50%;
-            border: 1px solid rgba(16,185,129,0.1);
-            animation: rippleRing 2.5s ease-out infinite;
-            animation-delay: 1.3s;
-        }
-
-        @keyframes rippleRing {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.6); opacity: 0; }
-        }
-
-        .confetti-wrap {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            border-radius: 28px;
-        }
-
-        .confetti {
-            position: absolute;
-            width: 6px; height: 6px;
-            border-radius: 1px;
-            opacity: 0;
-        }
-
-        .popup-overlay.active .confetti {
-            animation: confettiBurst 2.5s ease-out forwards;
-        }
-
-        @keyframes confettiBurst {
-            0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
-            30% { opacity: 1; transform: translateY(80px) rotate(360deg) scale(1); }
-            100% { opacity: 0; transform: translateY(200px) rotate(1080deg) scale(0.3); }
-        }
-
-        .popup-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            animation: fadeUp 0.6s ease forwards;
-            animation-delay: 0.5s;
-            opacity: 0;
-            transform: translateY(15px);
-        }
-
-        .popup-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            line-height: 1.6;
-            animation: fadeUp 0.6s ease forwards;
-            animation-delay: 0.6s;
-            opacity: 0;
-            transform: translateY(15px);
-        }
-
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .popup-btn {
-            padding: 14px 36px;
-            background: linear-gradient(135deg, var(--success), #34d399);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 24px rgba(16,185,129,0.3);
-            animation: fadeUp 0.6s ease forwards, btnPulse 2.5s ease-in-out infinite;
-            animation-delay: 0.7s, 1.2s;
-            opacity: 0;
-            transform: translateY(15px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .popup-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(16,185,129,0.4);
-        }
-
-        .popup-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .popup-btn:hover::before { left: 100%; }
-
-        @keyframes btnPulse {
-            0%, 100% { box-shadow: 0 4px 24px rgba(16,185,129,0.3); }
-            50% { box-shadow: 0 4px 36px rgba(16,185,129,0.5); }
-        }
-
-        .popup-close {
-            position: absolute;
-            top: 16px; right: 16px;
-            width: 36px; height: 36px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .popup-close:hover {
-            background: var(--surface-hover);
-            color: var(--text-primary);
-            border-color: var(--border-active);
-            transform: rotate(90deg);
-        }
-
-        @media (max-width: 1024px) {
-            .brand-panel { display: none; }
-            .login-panel { width: 100%; padding: 24px; }
-            .solar-scene { display: none; }
-        }
-
-        @media (max-width: 480px) {
-            .login-card { padding: 36px 24px; border-radius: 20px; }
-            .card-header h2 { font-size: 24px; }
-            .popup-card { padding: 40px 28px; }
-            .popup-title { font-size: 22px; }
-            .solar-toggle-container { bottom: 10px; padding: 8px 16px; }
+        .login-container {
+            animation: fadeInUp 0.6s ease-out;
         }
     </style>
 </head>
 <body>
-    <canvas id="bgCanvas"></canvas>
-
-    <!-- Solar Light Scene -->
-    <div class="solar-scene" id="solarScene">
-        <div class="solar-panel" id="solarPanel">
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-            <div class="solar-cell"></div>
-        </div>
-        <div class="light-bulb" id="lightBulb">
-            <div class="bulb-glass" id="bulbGlass"></div>
-            <div class="bulb-base"></div>
-        </div>
-        <div class="light-rays" id="lightRays">
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-            <div class="light-ray"></div>
-        </div>
-    </div>
-
-    <!-- Solar Toggle -->
-    <div class="solar-toggle-container">
-        <span class="solar-toggle-label">Solar Power</span>
-        <div class="solar-toggle active" id="solarToggle">
-            <div class="solar-toggle-thumb"></div>
-        </div>
-        <span class="solar-status on" id="solarStatus">ON</span>
-    </div>
-
-    <div class="brand-panel">
-        <div class="brand-badge">
-            <i class="fas fa-solar-panel"></i>
-            Solar & Electrical EPC
-        </div>
-        <h1 class="brand-title">Power Your Future with <span>Clean Solar Energy</span></h1>
-        <p class="brand-desc">India's Leading Electrical & Solar EPC Projects Company. We are committed to providing innovative energy solutions that help you lower costs, protect the environment, and power your future.</p>
-        <div class="brand-stats">
-            <div class="stat-item">
-                <div class="stat-value"><span class="counter" data-target="150">0</span>+</div>
-                <div class="stat-label">MW Installed</div>
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Enter your email" required>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-value"><span class="counter" data-target="500">0</span>+</div>
-                <div class="stat-label">Projects</div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Enter your password" required>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-value"><span class="counter" data-target="99">0</span>%</div>
-                <div class="stat-label">Satisfaction</div>
+            <div class="options">
+                <label class="remember-me">
+                    <input type="checkbox" id="remember" checked>
+                    <span>Remember me</span>
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
             </div>
-        </div>
-    </div>
-
-    <div class="login-panel">
-        <div class="login-card" id="loginCard">
-            <div class="card-glow"></div>
-            
-            <div class="logo-area">
-                <div class="logo-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <div class="logo-text">Vishal Technopower</div>
-                <div class="logo-sub">Engineering Your Electrical Needs</div>
-            </div>
-
-            <div class="card-header">
-                <h2>Welcome Back</h2>
-                <p>Sign in to access your project dashboard</p>
-            </div>
-
-            <form id="loginForm">
-                <div class="input-group">
-                    <label class="input-label">Email Address</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-envelope icon-left"></i>
-                        <input type="email" class="input-field" placeholder="name@vishaltechnopower.com" required>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Password</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-lock icon-left"></i>
-                        <input type="password" class="input-field" id="passwordInput" placeholder="Enter your password" required>
-                        <i class="fas fa-eye password-toggle" id="togglePassword"></i>
-                    </div>
-                </div>
-
-                <div class="options-row">
-                    <label class="remember-me">
-                        <input type="checkbox" checked>
-                        <span>Remember me</span>
-                    </label>
-                    <a href="#" class="forgot-link">Forgot Password?</a>
-                </div>
-
-                <button type="submit" class="login-btn" id="loginBtn">
-                    <span>Sign In</span>
-                    <div class="btn-spinner"></div>
-                </button>
-            </form>
-
-            <div class="divider">
-                <span>or continue with</span>
-            </div>
-
-            <div class="social-login">
-                <button class="social-btn">
-                    <i class="fab fa-google"></i>
-                    <span>Google</span>
-                </button>
-                <button class="social-btn">
-                    <i class="fab fa-microsoft"></i>
-                    <span>Microsoft</span>
-                </button>
-            </div>
-
-            <div class="signup-link">
-                Don't have an account? <a href="#">Request Access</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Popup with Solar Light -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-card">
-            <div class="confetti-wrap" id="confettiWrap"></div>
-            <button class="popup-close" id="popupClose">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <!-- Popup Solar Light -->
-            <div class="popup-solar-light" id="popupSolarLight">
-                <div class="popup-rays" id="popupRays">
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                    <div class="popup-ray"></div>
-                </div>
-                <div class="popup-bulb" id="popupBulb"></div>
-                <div class="popup-bulb-base"></div>
-            </div>
-
-            <div class="checkmark-container">
-                <div class="checkmark-circle">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-
-            <h2 class="popup-title">Access Granted</h2>
-            <p class="popup-subtitle">Solar power connected! Welcome back to Vishal Technopower.<br>Redirecting to your project dashboard...</p>
-            <button class="popup-btn" id="continueBtn">Continue to Dashboard</button>
+            <button type="submit" class="login-btn">Log In</button>
+        </form>
+        <div class="register-link">
+            Don't have an account? <a href="#">Register</a>
         </div>
     </div>
 
     <script>
-        // ===== CANVAS PARTICLES =====
-        const canvas = document.getElementById('bgCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.color = Math.random() > 0.5 ? '30, 91, 181' : '74, 158, 255';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 80; i++) particles.push(new Particle());
-        }
-        initParticles();
-
-        function connectParticles() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 150) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(30, 91, 181, ${0.03 * (1 - dist / 150)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            connectParticles();
-            requestAnimationFrame(animateCanvas);
-        }
-        animateCanvas();
-
-        // ===== SOLAR LIGHT TOGGLE =====
-        const solarToggle = document.getElementById('solarToggle');
-        const solarStatus = document.getElementById('solarStatus');
-        const bulbGlass = document.getElementById('bulbGlass');
-        const lightRays = document.getElementById('lightRays');
-        const popupBulb = document.getElementById('popupBulb');
-        const popupRays = document.getElementById('popupRays');
-        let isSolarOn = true;
-
-        solarToggle.addEventListener('click', () => {
-            isSolarOn = !isSolarOn;
-            
-            if (isSolarOn) {
-                solarToggle.classList.add('active');
-                solarStatus.textContent = 'ON';
-                solarStatus.classList.add('on');
-                bulbGlass.classList.remove('off');
-                lightRays.querySelectorAll('.light-ray').forEach(ray => ray.classList.remove('off'));
-                popupBulb.classList.remove('off');
-                popupRays.querySelectorAll('.popup-ray').forEach(ray => ray.classList.remove('off'));
-            } else {
-                solarToggle.classList.remove('active');
-                solarStatus.textContent = 'OFF';
-                solarStatus.classList.remove('on');
-                bulbGlass.classList.add('off');
-                lightRays.querySelectorAll('.light-ray').forEach(ray => ray.classList.add('off'));
-                popupBulb.classList.add('off');
-                popupRays.querySelectorAll('.popup-ray').forEach(ray => ray.classList.add('off'));
-            }
-        });
-
-        // ===== COUNTER ANIMATION =====
-        function animateCounters() {
-            const counters = document.querySelectorAll('.counter');
-            counters.forEach(counter => {
-                const target = parseFloat(counter.getAttribute('data-target'));
-                const isDecimal = target % 1 !== 0;
-                const duration = 2000;
-                const start = performance.now();
-                
-                function update(currentTime) {
-                    const elapsed = currentTime - start;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const ease = 1 - Math.pow(1 - progress, 3);
-                    const current = target * ease;
-                    counter.textContent = isDecimal ? current.toFixed(1) : Math.floor(current);
-                    if (progress < 1) requestAnimationFrame(update);
-                }
-                requestAnimationFrame(update);
-            });
-        }
-        setTimeout(animateCounters, 800);
-
-        // ===== PASSWORD TOGGLE =====
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('passwordInput');
-        togglePassword.addEventListener('click', () => {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            togglePassword.classList.toggle('fa-eye');
-            togglePassword.classList.toggle('fa-eye-slash');
-        });
-
-        // ===== LOGIN FORM =====
-        const loginForm = document.getElementById('loginForm');
-        const loginBtn = document.getElementById('loginBtn');
-        const popupOverlay = document.getElementById('popupOverlay');
-        const popupClose = document.getElementById('popupClose');
-        const continueBtn = document.getElementById('continueBtn');
-
-        loginForm.addEventListener('submit', (e) => {
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            loginBtn.classList.add('loading');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
             
-            // Auto turn on solar light if off
-            if (!isSolarOn) {
-                solarToggle.click();
+            // Demo validation
+            if (email && password) {
+                alert('Login successful!\\nEmail: ' + email + '\\nRemember me: ' + remember);
             }
-            
-            setTimeout(() => {
-                loginBtn.classList.remove('loading');
-                showPopup();
-            }, 1800);
         });
 
-        // ===== POPUP =====
-        function showPopup() {
-            popupOverlay.classList.add('active');
-            createConfetti();
-            document.body.style.overflow = 'hidden';
-            
-            // Ensure popup solar light is on
-            popupBulb.classList.remove('off');
-            popupRays.querySelectorAll('.popup-ray').forEach(ray => ray.classList.remove('off'));
-        }
+        // Forgot password handler
+        document.querySelector('.forgot-password').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Password reset link would be sent to your email.');
+        });
 
-        function hidePopup() {
-            popupOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-            setTimeout(() => { document.getElementById('confettiWrap').innerHTML = ''; }, 600);
-        }
-
-        popupClose.addEventListener('click', hidePopup);
-        continueBtn.addEventListener('click', hidePopup);
-        popupOverlay.addEventListener('click', (e) => { if (e.target === popupOverlay) hidePopup(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hidePopup(); });
-
-        // ===== CONFETTI =====
-        function createConfetti() {
-            const container = document.getElementById('confettiWrap');
-            const colors = ['#1e5bb5', '#4a9eff', '#87ceeb', '#10b981', '#f59e0b', '#fbbf24'];
-            for (let i = 0; i < 40; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = (20 + Math.random() * 60) + '%';
-                confetti.style.top = '-10px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.width = (4 + Math.random() * 6) + 'px';
-                confetti.style.height = (4 + Math.random() * 6) + 'px';
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                confetti.style.animationDelay = (Math.random() * 1.5) + 's';
-                confetti.style.animationDuration = (2 + Math.random() * 1.5) + 's';
-                container.appendChild(confetti);
-            }
-        }
+        // Register handler
+        document.querySelector('.register-link a').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Redirecting to registration page...');
+        });
     </script>
 </body>
 </html>'''
 
-with open('/mnt/agents/output/vishal_technopower_solar_light_login.html', 'w', encoding='utf-8') as f:
+with open('/mnt/agents/output/login_page.html', 'w') as f:
     f.write(html_code)
 
-print("✅ Vishal Technopower Solar Light ON/OFF Login Page saved!")
-print(f"📁 Size: {len(html_code):,} characters")
+print("Login page created successfully!")
